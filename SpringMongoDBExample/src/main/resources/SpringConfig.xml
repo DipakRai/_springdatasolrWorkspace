@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+    xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:solr="http://www.springframework.org/schema/data/solr"
+	xsi:schemaLocation="
+		  http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/data/mongo
+          http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/data/solr 
+          http://www.springframework.org/schema/data/solr/spring-solr.xsd">
+	<mongo:mongo host="127.0.0.1" port="27017" />
+	<mongo:db-factory dbname="yourdb" />
+	<bean id="mongoTemplate"
+		class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory"
+			ref="mongoDbFactory" />
+	</bean>
+	<solr:repositories base-package="com.mkyong.repo" />
+	<!-- Define HTTP Solr server -->
+	<solr:solr-server id="solrServer"
+		url="http://localhost:8983/solr/" />
+
+	<!-- Define Solr template -->
+	<bean id="solrTemplate"  class="org.springframework.data.solr.core.SolrTemplate">
+            <constructor-arg index="0" ref="solrServer"/>
+        </bean>
+</beans>
